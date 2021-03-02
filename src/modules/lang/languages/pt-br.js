@@ -13,13 +13,13 @@ export default {
     'dezembro'
   ],
   days: [
-    { end_week: true, name: 'Domingo' },
-    { end_week: false, name: 'Segunda' },
-    { end_week: false, name: 'Terça' },
-    { end_week: false, name: 'Quarta' },
-    { end_week: false, name: 'Quinta' },
-    { end_week: false, name: 'Sexta' },
-    { end_week: true, name: 'Sábado' }
+    { end_week: true, name: 'D' },
+    { end_week: false, name: 'S' },
+    { end_week: false, name: 'T' },
+    { end_week: false, name: 'Q' },
+    { end_week: false, name: 'Q' },
+    { end_week: false, name: 'S' },
+    { end_week: true, name: 'S' }
   ],
   days_full: [
     { end_week: true, name: 'Domingo' },

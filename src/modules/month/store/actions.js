@@ -22,13 +22,13 @@ export const ActionSetDate = ({ dispatch }, payload) => {
     case 'object': {
       date = payload
       year = date.getFullYear()
-      month = date.getMonth() + 1
+      month = date.getMonth()
       break
     }
     default: {
       date = new Date(payload)
       year = date.getFullYear()
-      month = date.getMonth() + 1
+      month = date.getMonth()
       break
     }
   }
@@ -36,12 +36,12 @@ export const ActionSetDate = ({ dispatch }, payload) => {
   dispatch('ActionSetYear', year)
   dispatch('ActionSetMonth', month)
 
-  const countDays = new Date(year, month, 0).getDate()
+  const countDays = new Date(year, month + 1, 0).getDate()
 
   days = []
 
   for (let i = 1; i <= countDays; i++) {
-    const date = `${(month.toString().length < 2) ? `0${month}` : month}/${(i.toString().length < 2) ? `0${i}` : i}/${year}`
+    const date = `${((month + 1).toString().length < 2) ? `0${(month + 1)}` : (month + 1)}/${(i.toString().length < 2) ? `0${i}` : i}/${year}`
     days.push({
       day: `${(i.toString().length < 2) ? `0${i}` : i}`,
       date,
