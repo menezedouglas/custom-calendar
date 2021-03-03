@@ -2,6 +2,7 @@
   .month-arya {
     display: inline-block;
     padding: 15px 0 0 0;
+    margin: 0 auto;
   }
 
   .calendar {

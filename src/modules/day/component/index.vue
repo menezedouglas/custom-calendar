@@ -1,10 +1,6 @@
 <template>
-  <div class="p-3">
+  <div>
     <div class="row">
-      <div class="col-12">
-        <h2 class="text-muted">Eventos</h2>
-        <hr class="my-2 mb-3">
-      </div>
       <div
         class="col-12"
         v-for="(event, index) in getEvents()"

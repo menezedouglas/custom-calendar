@@ -1,6 +1,14 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import store from './store'
-import '@/modules/bootstrap'
+import bootstrap from '@/modules/bootstrap'
 
-createApp(App).use(store).mount('#app')
+import '@fortawesome/fontawesome-free/css/all.min.css'
+import '@fortawesome/fontawesome-free/js/all.min.js'
+
+const app = createApp(App)
+
+app.use(store)
+app.use(bootstrap)
+
+app.mount('#app')
