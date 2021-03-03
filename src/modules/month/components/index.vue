@@ -181,7 +181,7 @@ export default {
       })
     },
     setDate () {
-      this.ActionSetDate('01/01/2020')
+      this.ActionSetDate(this.now)
       this.days = this.getDays()
     }
   },
