@@ -1,24 +1,13 @@
-# custom-calendar
+# dm_calendar
 
-## Project setup
-```
-yarn install
-```
+### NPM
 
-### Compiles and hot-reloads for development
 ```
-yarn serve
+npm i dm_calendar
 ```
 
-### Compiles and minifies for production
-```
-yarn build
-```
+### YARN
 
-### Lints and fixes files
 ```
-yarn lint
+yarn add dm_calendar
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
