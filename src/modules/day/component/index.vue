@@ -20,8 +20,8 @@
         </div>
       </div>
       <div class="col-12">
-        <div class="alert alert-success">
-          Não há nada para hoje, fique tranquilo!
+        <div class="alert alert-primary">
+          {{ lang.components.day.messages.nothing_today }}
         </div>
       </div>
     </div>
@@ -32,12 +32,44 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'day',
+  props: ['langname'],
   data () {
-    return {}
+    return {
+      lang: {
+        components: {
+          day: {
+            title: '',
+            messages: {
+              nothing_today: ''
+            }
+          }
+        }
+      },
+      month: '',
+      year: ''
+    }
   },
   methods: {
     ...mapActions('day', ['ActionSetDate', 'ActionSetEvents']),
-    ...mapGetters('day', ['getDate', 'getEvents'])
+    ...mapGetters('day', ['getDate', 'getEvents']),
+    ...mapActions('month', ['ActionSetDate']),
+    ...mapGetters('month', ['getDays', 'getMonth', 'getYear']),
+    ...mapActions('lang', ['ActionSetCurrent']),
+    ...mapGetters('lang', ['getVars']),
+    setLanguage () {
+      this.ActionSetCurrent(this.langname)
+      this.lang = this.getVars().default
+      this.month = this.lang.months[this.getMonth()]
+      this.year = this.getYear().toString()
+    }
+  },
+  mounted () {
+    this.setLanguage()
+    console.log(
+      this.lang,
+      this.month,
+      this.year
+    )
   }
 }
 </script>

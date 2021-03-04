@@ -29,6 +29,16 @@
     color: #000 !important;
   }
 
+  .is-today {
+    color: #fff !important;
+    border-radius: 100%;
+    background-color: #198754;
+  }
+
+  .day-selected {
+    color: #fff !important;
+  }
+
   .calendar tbody tr .util-day:hover {
     background: rgba(0,0,0,.1) !important;
   }
@@ -50,6 +60,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    transition: all .1s ease-in-out;
   }
 
   .calendar-mini .day-end-week {
@@ -93,9 +104,9 @@
         <thead>
           <tr>
             <th
-              v-for="(col, index) in days.cols"
+              v-for="(col, index) in table.cols"
               v-bind:key="index"
-              :class="(col.end_week) ? `` : `util-day`"
+              :class="(col.end_week) ? `pb-2` : `util-day pb-2`"
             >
               {{ col.name }}
             </th>
@@ -103,18 +114,19 @@
         </thead>
         <tbody>
           <tr
-            v-for="(row, rIndex) in days.rows"
+            v-for="(row, rIndex) in table.rows"
             v-bind:key="rIndex"
           >
             <td
-              v-for="(day, dIndex) in row"
+              v-for="(data, dIndex) in row"
               v-bind:key="dIndex"
-              :class="(days.cols[dIndex].end_week) ? `day-end-week` : `` "
+              :class="(table.cols[dIndex].end_week) ? `day-end-week` : `` "
             >
               <div
-                :class="(day != '') ? ((days.cols[dIndex].end_week) ? `day-arya` : `day-arya util-day` ) : `day-arya day-inactive` "
+                :class="(data.today) ? `${data.styles} is-today` : data.styles"
+                @click="setDay(data.day)"
               >
-                {{ (day != '') ? day : '' }}
+                {{ (data.day !== '') ? data.day : '' }}
               </div>
             </td>
           </tr>
@@ -127,14 +139,14 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'month',
-  props: ['langname', 'mode'],
+  props: ['langname', 'mode', 'date'],
   data () {
     return {
-      lang: [],
+      lang: {},
       month: '',
       year: '',
       days: [],
-      now: new Date()
+      table: []
     }
   },
   methods: {
@@ -146,22 +158,17 @@ export default {
       this.ActionSetCurrent(this.langname)
       this.lang = this.getVars().default
       this.month = this.lang.months[this.getMonth()]
-      this.days.map(day => {
-        const data = new Date(day.date)
-        day.end_week = this.lang.days[data.getDay()].end_week
-        day.col = data.getDay()
-      })
       this.year = this.getYear().toString()
     },
-    generateTable () {
+    generateTable (changeDay = false, day = null) {
       const days = this.days
-      this.days = { rows: [], cols: [] }
+      this.table = { rows: [], cols: [] }
       this.lang.days.map((weekDay, index) => {
         const col = {
           end_week: weekDay.end_week,
           name: weekDay.name
         }
-        this.days.cols.push(col)
+        this.table.cols.push(col)
       })
 
       for (let r = 0; r < 6; r++) {
@@ -169,7 +176,7 @@ export default {
         for (let c = 0; c < 7; c++) {
           row.push('')
           if (c + 1 === 7) {
-            this.days.rows.push(row)
+            this.table.rows.push(row)
           }
         }
       }
@@ -177,13 +184,53 @@ export default {
       let rows = 0
       days.map(data => {
         const col = new Date(data.date).getDay()
-        this.days.rows[rows][col] = data.day
+        data.styles = this.getDayStyles(data, changeDay, day)
+        this.table.rows[rows][col] = data
         if (col >= 6) rows++
       })
     },
     setDate () {
-      this.ActionSetDate(this.now)
+      this.ActionSetDate(this.date)
       this.days = this.getDays()
+    },
+    setDay (day) {
+      const date = new Date(this.getYear(), this.getMonth(), parseInt(day))
+      this.ActionSetDate(date)
+      this.generateTable(true, day)
+      this.$emit('changeDay', date)
+    },
+    isToday (day, changeDay = false, dayToChange = null) {
+      var param = null
+
+      if (changeDay) {
+        if (dayToChange !== null) {
+          param = new Date(this.getYear(), this.getMonth(), parseInt(dayToChange))
+        } else {
+          param = new Date(this.getYear(), this.getMonth(), parseInt(day))
+        }
+      } else {
+        param = (typeof this.date === 'object') ? this.date : new Date(this.date)
+      }
+
+      const date = new Date(this.getYear(), this.getMonth(), parseInt(day))
+
+      return (param.toDateString() === date.toDateString())
+    },
+    getDayStyles (data, changeDay = false, day = null) {
+      const date = new Date(data.date)
+
+      return (
+        (data.day !== '')
+          ? (
+            (this.table.cols[date.getDay()].end_week)
+              ? ((this.isToday(data.day, changeDay, day)) ? (
+                (changeDay) ? 'day-arya day-selected bg-primary' : 'day-arya'
+              ) : 'day-arya')
+              : ((this.isToday(data.day, changeDay, day)) ? (
+                (changeDay) ? 'day-arya util-day day-selected bg-primary' : 'day-arya util-day'
+              ) : 'day-arya util-day')
+          ) : 'day-arya day-inactive'
+      )
     }
   },
   mounted () {
