@@ -90,11 +90,27 @@
 
 .content {
   position: fixed;
+  z-index: -1;
   top: 60px;
   right: 0;
   width: calc(100% - 400px);
   padding: 22px;
   transition: all .4s ease-in-out;
+}
+
+.btn-select-language {
+  font-size: 20pt !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.btn-select-language:hover {
+  color: #0d6efd !important;
+}
+
+.btn-select-language:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 </style>
@@ -114,14 +130,52 @@
     </label>
     <div class="left-bar">
       <section class="left-bar-content">
-        <month :langname="(lang) ? lang : `pt-br`" mode="mini"></month>
+        <month
+          :langname="(lang) ? lang : `pt-br`"
+          mode="mini"
+          :date="date"
+          @changeDay="changeDay($event)"
+        ></month>
       </section>
     </div>
     <div class="top-bar">
-      <h2 class="text-muted">Eventos</h2>
+      <div class="row">
+        <div class="col p-2">
+          <h4 class="text-muted">{{ language.components.day.title }}</h4>
+        </div>
+        <div class="col-auto p-2">
+          <small class="text-secondary">{{ day }} de {{ month }} de {{ year }}</small>
+        </div>
+        <div class="col-auto">
+          <div class="dropdown">
+            <button
+              class="btn btn-select-language dropdown-toggle"
+              type="button"
+              id="dropdownMenuButton1"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <i class="fas fa-language"></i>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="#"
+                  @click="setLanguage('pt-br')"
+                >
+                  Português do Brasil
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="content">
-      <day></day>
+      <day
+        :langname="(lang) ? lang : `pt-br`"
+      ></day>
     </div>
   </div>
 </template>
@@ -129,6 +183,7 @@
 <script>
 import { component as month } from '@/modules/month'
 import { component as day } from '@/modules/day'
+import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'custom-calendar',
   props: {
@@ -142,12 +197,47 @@ export default {
       required: false
     }
   },
+  data () {
+    return {
+      language: {
+        components: {
+          day: {
+            title: ''
+          }
+        }
+      },
+      month: '',
+      year: '',
+      day: ''
+    }
+  },
   components: {
     month,
     day
   },
-  created () {
-    console.log(this.lang)
+  methods: {
+    ...mapGetters('day', ['getDate', 'getEvents']),
+    ...mapGetters('month', ['getDays', 'getMonth', 'getYear']),
+    ...mapActions('lang', ['ActionSetCurrent']),
+    ...mapGetters('lang', ['getVars']),
+    setLanguage (lang = null, changeDate = false, newDate = null) {
+      this.ActionSetCurrent(lang || this.lang)
+      this.language = this.getVars().default
+      this.month = this.language.months[this.getMonth()]
+      this.year = this.getYear().toString()
+      this.day = ((changeDate) ? (
+        (typeof newDate === 'object') ? newDate.getDate() : new Date(newDate).getDate()
+      ) : (
+        (typeof this.date === 'object') ? this.date.getDate() : new Date(this.date).getDate()
+      ))
+    },
+    changeDay (date) {
+      this.$emit('changeDate', date)
+      this.setLanguage(this.lang, true, date)
+    }
+  },
+  mounted () {
+    this.setLanguage()
   }
 }
 </script>

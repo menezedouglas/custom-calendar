@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import modules from './modules'
+import modules from '@/store/modules'
 
 Vue.use(Vuex)
 
-// eslint-disable-next-line no-new
-new Vuex.Store({ modules })
+export default new Vuex.Store({ modules })

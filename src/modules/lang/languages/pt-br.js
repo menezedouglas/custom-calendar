@@ -29,5 +29,13 @@ export default {
     { end_week: false, name: 'Quinta-Feira' },
     { end_week: false, name: 'Sexta-Feira' },
     { end_week: true, name: 'Sábado' }
-  ]
+  ],
+  components: {
+    day: {
+      title: 'Eventos',
+      messages: {
+        nothing_today: 'Não há nada para hoje, fique tranquilo!'
+      }
+    }
+  }
 }

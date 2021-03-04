@@ -1,6 +1,11 @@
 <template>
   <div>
-    <full lang="pt-br" :date="new Date()" :data="[]"></full>
+    <full
+      lang="pt-br"
+      :date="new Date()"
+      :data="[]"
+      @changeDate="changeDate($event)"
+    ></full>
   </div>
 </template>
 
@@ -13,6 +18,11 @@ export default {
   },
   components: {
     full
+  },
+  methods: {
+    changeDate (date) {
+      console.log(date)
+    }
   }
 }
 </script>
