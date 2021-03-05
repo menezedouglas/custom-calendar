@@ -163,7 +163,7 @@ export default {
     generateTable (changeDay = false, day = null) {
       const days = this.days
       this.table = { rows: [], cols: [] }
-      this.lang.days.map((weekDay, index) => {
+      this.lang.days_small.map((weekDay, index) => {
         const col = {
           end_week: weekDay.end_week,
           name: weekDay.name

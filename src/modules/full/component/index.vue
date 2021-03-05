@@ -113,6 +113,53 @@
   box-shadow: none !important;
 }
 
+.absolute-center {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+</style>
+
+<style lang="sass">
+  .bg-blue
+    background: $blue
+
+  .bg-indigo
+    background: $indigo
+
+  .bg-purple
+    background: $purple
+
+  .bg-pink
+    background: $pink
+
+  .bg-red
+    background: $red
+
+  .bg-orange
+    background: $orange
+
+  .bg-yellow
+    background: $yellow
+
+  .bg-green
+    background: $green
+
+  .bg-teal
+    background: $teal
+
+  .bg-cyan
+    background: $cyan
+
+  .bg-gray
+    background: $gray-500
+
+  .bg-black
+    background: $black
+
+  .bg-white
+    background: $white
 </style>
 
 <template>
@@ -130,12 +177,20 @@
     </label>
     <div class="left-bar">
       <section class="left-bar-content">
-        <month
-          :langname="(lang) ? lang : `pt-br`"
-          mode="mini"
-          :date="date"
-          @changeDay="changeDay($event)"
-        ></month>
+        <div class="row">
+          <div class="col-12">
+            <month
+              :langname="(lang) ? lang : `pt-br`"
+              mode="mini"
+              :date="date"
+              @changeDay="changeDay($event)"
+            ></month>
+          </div>
+          <div class="col-12">
+            <h5><small class=""><i class="fas fa-circle"></i></small> EVENTOS</h5>
+            <hr class="my-2">
+          </div>
+        </div>
       </section>
     </div>
     <div class="top-bar">
