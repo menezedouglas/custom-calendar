@@ -1,6 +1,33 @@
 {
   "name": "dm_calendar",
-  "version": "0.5.1",
+  "version": "0.5.3",
+  "author": {
+    "name": "Douglas Menezes",
+    "email": "menezedouglas@outlook.com.br",
+    "url": "https://www.linkedin.com/in/menezedouglas/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/menezedouglas/dm_calendar.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "vue",
+    "vuejs",
+    "node",
+    "nodejs",
+    "calendar",
+    "library",
+    "front-end",
+    "fronend",
+    "front",
+    "end",
+    "js",
+    "javascript",
+    "html",
+    "css3",
+    "es6"
+  ],
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

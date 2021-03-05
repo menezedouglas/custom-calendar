@@ -65,11 +65,6 @@ export default {
   },
   mounted () {
     this.setLanguage()
-    console.log(
-      this.lang,
-      this.month,
-      this.year
-    )
   }
 }
 </script>

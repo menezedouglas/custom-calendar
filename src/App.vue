@@ -5,6 +5,7 @@
       :date="new Date()"
       :data="[]"
       @changeDate="changeDate($event)"
+      :options="{}"
     ></full>
   </div>
 </template>
@@ -21,7 +22,7 @@ export default {
   },
   methods: {
     changeDate (date) {
-      console.log(date)
+      //
     }
   }
 }

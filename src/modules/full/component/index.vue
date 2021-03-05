@@ -143,10 +143,16 @@
         <div class="col p-2">
           <h4 class="text-muted">{{ language.components.day.title }}</h4>
         </div>
-        <div class="col-auto p-2">
+        <div
+          v-if="((options.showDate != null) ? options.showDate : true)"
+          class="col-auto p-2"
+        >
           <small class="text-secondary">{{ day }} de {{ month }} de {{ year }}</small>
         </div>
-        <div class="col-auto">
+        <div
+          v-if="((options.selectLanguage != null) ? options.selectLanguage : true)"
+          class="col-auto"
+        >
           <div class="dropdown">
             <button
               class="btn btn-select-language dropdown-toggle"
@@ -194,6 +200,9 @@ export default {
       required: true
     },
     data: {
+      required: false
+    },
+    options: {
       required: false
     }
   },
