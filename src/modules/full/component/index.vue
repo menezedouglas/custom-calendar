@@ -22,10 +22,11 @@
 #left_bar_ctrl:checked ~ .left-bar {
   width: 50px;
   padding: 0;
+  overflow: hidden;
 }
 
 #left_bar_ctrl:checked ~ label>#btn_left_bar {
-  left: 0 !important;
+  left: 70px !important;
 }
 
 #left_bar_ctrl:checked ~ .top-bar {
@@ -38,16 +39,18 @@
 
 #btn_left_bar {
   position: absolute;
-  top: 10px;
-  left: 310px;
+  bottom: 20px;
+  left: 420px;
   z-index: 100;
 
   width: 50px;
   height: 50px;
 
-  color: #c1c1c1;
+  color: #fff;
+  background-color: #0d6efd;
+  border-radius: 100%;
   cursor: pointer;
-  font-size: 25pt;
+  font-size: 20pt;
 
   display: flex;
   align-items: center;
@@ -57,7 +60,7 @@
 }
 
 #btn_left_bar:hover {
-  color: black;
+  opacity: .7;
 }
 
 .left-bar {
@@ -68,6 +71,8 @@
   height: 100%;
   border-right: 1px solid #c1c1c1;
   transition: all .4s ease-in-out;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .left-bar-content {
@@ -119,47 +124,23 @@
   justify-content: center !important;
 }
 
-</style>
+.card-markups {
+  border: none !important;
+  min-height: 290px;
+  max-height: 350px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
 
-<style lang="sass">
-  .bg-blue
-    background: $blue
+.card-markup {
+  max-height: 100px;
+  margin-bottom: 10px;
+}
 
-  .bg-indigo
-    background: $indigo
+.card-markup .card-body {
+  background: rgba(13,110,253,.3);
+}
 
-  .bg-purple
-    background: $purple
-
-  .bg-pink
-    background: $pink
-
-  .bg-red
-    background: $red
-
-  .bg-orange
-    background: $orange
-
-  .bg-yellow
-    background: $yellow
-
-  .bg-green
-    background: $green
-
-  .bg-teal
-    background: $teal
-
-  .bg-cyan
-    background: $cyan
-
-  .bg-gray
-    background: $gray-500
-
-  .bg-black
-    background: $black
-
-  .bg-white
-    background: $white
 </style>
 
 <template>
@@ -186,9 +167,38 @@
               @changeDay="changeDay($event)"
             ></month>
           </div>
-          <div class="col-12">
-            <h5><small class=""><i class="fas fa-circle"></i></small> EVENTOS</h5>
-            <hr class="my-2">
+          <div class="col-12 pt-4">
+            <h5>Para este mês</h5>
+            <hr class="my-2 mb-2">
+            <div class="card card-markups">
+              <div class="card-body">
+                <div
+                  class="card card-markup"
+                  v-for="(date, index) in data"
+                  v-bind:key="index"
+                >
+                  <div class="card-body">
+                    <div class="row">
+                      <div :class="`col-auto ${getClassDate(date.type)}`">
+                        <i class="fas fa-circle"></i>
+                      </div>
+                      <div class="col">
+                        <p class="p-0 m-0" style="font-weight: bold;">{{ date.title }}</p>
+                        <small class="text-muted" style="font-size: 8pt;">
+                          {{ getShowDate(date) }}
+                        </small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  v-if="data.length === 0"
+                  class="alert alert-success"
+                >
+                  Não há programação para este mês!
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -196,13 +206,14 @@
     <div class="top-bar">
       <div class="row">
         <div class="col p-2">
-          <h4 class="text-muted">{{ language.components.day.title }}</h4>
-        </div>
-        <div
-          v-if="((options.showDate != null) ? options.showDate : true)"
-          class="col-auto p-2"
-        >
-          <small class="text-secondary">{{ day }} de {{ month }} de {{ year }}</small>
+          <h4 class="text-muted">
+            {{ language.components.day.title }}
+            <span
+              v-if="((options.showDate != null) ? options.showDate : true)"
+            >
+              para {{ day }} de {{ month }} de {{ year }}
+            </span>
+          </h4>
         </div>
         <div
           v-if="((options.selectLanguage != null) ? options.selectLanguage : true)"
@@ -236,6 +247,8 @@
     <div class="content">
       <day
         :langname="(lang) ? lang : `pt-br`"
+        :events="events"
+        :date="date"
       ></day>
     </div>
   </div>
@@ -272,7 +285,8 @@ export default {
       },
       month: '',
       year: '',
-      day: ''
+      day: '',
+      events: []
     }
   },
   components: {
@@ -298,6 +312,73 @@ export default {
     changeDay (date) {
       this.$emit('changeDate', date)
       this.setLanguage(this.lang, true, date)
+      const showDate = {
+        other: (data, param) => {
+          const dataDate = new Date(data.date)
+          const ref = (typeof param === 'object') ? param : new Date(param)
+
+          if (dataDate.getDate() === ref.getDate()) {
+            this.events.push(data)
+          }
+        },
+        event: (data, param) => {
+          const init = new Date(data.init)
+          const end = new Date(data.end)
+          const ref = (typeof param === 'object') ? param : new Date(param)
+          if ((init.getDate() <= ref.getDate()) && (end.getDate() >= ref.getDate())) {
+            this.events.push(data)
+          }
+        },
+        holiday: (data, param) => {
+          const dataDate = new Date(data.date)
+          const ref = (typeof param === 'object') ? param : new Date(param)
+
+          if (dataDate.getDate() === ref.getDate()) {
+            this.events.push(data)
+          }
+        }
+      }
+      this.events = []
+      this.data.map(data => {
+        showDate[data.type](data, date)
+      })
+    },
+    getClassDate (type) {
+      switch (type.toUpperCase()) {
+        case 'EVENT': {
+          return 'text-primary'
+        }
+        case 'HOLIDAY': {
+          return 'text-success'
+        }
+        case 'OTHER': {
+          return 'text-warning'
+        }
+        default: {
+          return 'text-info'
+        }
+      }
+    },
+    getShowDate (data) {
+      let date = null
+      let init = null
+      let end = null
+
+      switch (data.type.toUpperCase()) {
+        case 'HOLIDAY': {
+          date = new Date(data.date)
+          return `Em ${date.toLocaleDateString()}`
+        }
+        case 'EVENT': {
+          init = new Date(data.init)
+          end = new Date(data.end)
+          return `De ${init.toLocaleDateString()} até ${end.toLocaleDateString()}`
+        }
+        case 'OTHER': {
+          date = new Date(data.date)
+          return `Em ${date.toLocaleDateString()}`
+        }
+      }
     }
   },
   mounted () {

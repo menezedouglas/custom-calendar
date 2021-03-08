@@ -43,7 +43,9 @@ export default {
     day: {
       title: 'Eventos',
       messages: {
-        nothing_today: 'Não há nada para hoje, fique tranquilo!'
+        nothing_today: 'Não há nada para hoje, fique tranquilo!',
+        nothing_future: 'Não há nada para este dia, fique tranquilo!',
+        nothing_past: 'Não houve nada neste dia, fique tranquilo!'
       }
     }
   }

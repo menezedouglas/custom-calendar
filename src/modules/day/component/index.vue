@@ -3,10 +3,10 @@
     <div class="row">
       <div
         class="col-12"
-        v-for="(event, index) in getEvents()"
+        v-for="(event, index) in events"
         v-bind:key="index"
       >
-        <div class="card border-0 shadow">
+        <div class="card border-0 shadow mb-3">
           <div class="card-body">
             <div class="row">
               <div class="col">
@@ -19,7 +19,10 @@
           </div>
         </div>
       </div>
-      <div class="col-12">
+      <div
+        v-if="events.length === 0"
+        class="col-12"
+      >
         <div class="alert alert-primary">
           {{ lang.components.day.messages.nothing_today }}
         </div>
@@ -32,7 +35,7 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
   name: 'day',
-  props: ['langname'],
+  props: ['langname', 'events', 'date'],
   data () {
     return {
       lang: {
@@ -46,7 +49,9 @@ export default {
         }
       },
       month: '',
-      year: ''
+      year: '',
+      dateSelected: '',
+      eventsToday: []
     }
   },
   methods: {

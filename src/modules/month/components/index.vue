@@ -33,6 +33,7 @@
     color: #fff !important;
     border-radius: 100%;
     background-color: #198754;
+    opacity: .5;
   }
 
   .day-selected {
@@ -96,7 +97,31 @@
   <div class="month-arya">
     <div class="row">
       <div class="col px-4 pb-3 pt-2">
-        <h5 v-if="mode === 'mini'">{{ month.toUpperCase() }} {{ year }}</h5>
+        <div class="row">
+          <div class="col-auto">
+            <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+              <button type="button" class="btn btn-sm btn-primary">
+                <i class="fas fa-fast-backward"></i>
+              </button>
+              <button type="button" class="btn btn-sm btn-primary">
+                <i class="fas fa-step-backward"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col text-center">
+            <h5 v-if="mode === 'mini'">{{ month.toUpperCase() }} {{ year }}</h5>
+          </div>
+          <div class="col-auto">
+            <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+              <button type="button" class="btn btn-sm btn-primary">
+                <i class="fas fa-step-forward"></i>
+              </button>
+              <button type="button" class="btn btn-sm btn-primary">
+                <i class="fas fa-fast-forward"></i>
+              </button>
+            </div>
+          </div>
+        </div>
         <hr class="my-2 mb-2">
       </div>
     </div>
