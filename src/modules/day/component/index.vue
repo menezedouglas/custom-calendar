@@ -24,7 +24,7 @@
         class="col-12"
       >
         <div class="alert alert-primary">
-          {{ lang.components.day.messages.nothing_today }}
+          {{ date }} {{ lang.components.day.messages.nothing_today }}
         </div>
       </div>
     </div>

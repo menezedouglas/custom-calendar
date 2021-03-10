@@ -238,8 +238,8 @@ export default {
         if (col >= 6) rows++
       })
     },
-    setDate () {
-      this.ActionSetDate(this.date)
+    setDate (date = null) {
+      this.ActionSetDate((date) || this.date)
       this.days = this.getDays()
     },
     setDay (day) {
@@ -286,41 +286,46 @@ export default {
         month: () => {
           const month = (this.getMonth() - 1 < 0) ? 11 : this.getMonth() - 1
           const year = (this.getMonth() - 1 < 0) ? this.getYear() - 1 : this.getYear()
-          const date = `${((month + 1).toString().length === 1) ? `0${month + 1}` : month + 1}/01/${year}`
-          console.log(date)
-          this.ActionSetDate(date)
+          const date = new Date(year, month, 1)
+          this.setDate(date)
+          this.setLanguage()
+          this.generateTable()
+          this.$emit('backwardMonth', date)
         },
         year: () => {
           const month = this.getMonth()
           const year = this.getYear() - 1
-          const date = `${((month + 1).toString().length === 1) ? `0${month + 1}` : month + 1}/01/${year}`
-          this.ActionSetDate(date)
+          const date = new Date(year, month, 1)
+          this.setDate(date)
+          this.setLanguage()
+          this.generateTable()
+          this.$emit('backwardYear', date)
         }
       }
-
       types[type]()
-      this.setLanguage()
-      this.generateTable()
     },
     forward (type) {
       const types = {
         month: () => {
-          const month = (this.getMonth() + 1 > 11) ? 1 : (this.getMonth() + 1)
+          const month = (this.getMonth() + 1 > 11) ? 0 : this.getMonth() + 1
           const year = (this.getMonth() + 1 > 11) ? this.getYear() + 1 : this.getYear()
-          const date = `${((month + 1).toString().length === 1) ? `0${month + 1}` : month + 1}/01/${year}`
-          this.ActionSetDate(date)
+          const date = new Date(year, month, 1)
+          this.setDate(date)
+          this.setLanguage()
+          this.generateTable()
+          this.$emit('forwardMonth', date)
         },
         year: () => {
           const month = this.getMonth()
           const year = this.getYear() + 1
-          const date = `${((month + 1).toString().length === 1) ? `0${month + 1}` : month + 1}/01/${year}`
-          this.ActionSetDate(date)
+          const date = new Date(year, month, 1)
+          this.setDate(date)
+          this.setLanguage()
+          this.generateTable()
+          this.$emit('forwardYear', date)
         }
       }
-
       types[type]()
-      this.setLanguage()
-      this.generateTable()
     }
   },
   mounted () {

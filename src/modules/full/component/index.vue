@@ -39,7 +39,7 @@
 
 #btn_left_bar {
   position: absolute;
-  bottom: 20px;
+  bottom: 70px;
   left: 420px;
   z-index: 100;
 
@@ -141,6 +141,26 @@
   background: rgba(13,110,253,.2);
 }
 
+.footer {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: calc(100% - 400px);
+  height: 50px;
+  padding: 17px;
+  box-shadow:  0 0 10px 2px rgba(0,0,0,.5);
+  z-index: -1;
+  color: rgba(0,0,0,.5);
+  text-align: right;
+  font-size: 9pt;
+  font-weight: bold;
+}
+
+.footer a {
+  text-decoration: none;
+  color: #000000;
+}
+
 </style>
 
 <template>
@@ -165,6 +185,10 @@
               mode="mini"
               :date="date"
               @changeDay="changeDay($event)"
+              @backwardMonth="changeMonthOrYear($event)"
+              @backwardYear="changeMonthOrYear($event)"
+              @forwardMonth="changeMonthOrYear($event)"
+              @forwardYear="changeMonthOrYear($event)"
             ></month>
           </div>
           <div class="col-12 pt-4">
@@ -251,6 +275,22 @@
         :date="date"
       ></day>
     </div>
+    <div class="footer">
+      <a
+        :href="configs.repository.url"
+        class="text-uppercase"
+        target="_blank"
+      >
+        {{ configs.name }}
+      </a>
+      by
+      <a
+        :href="configs.author.url"
+        target="_blank"
+      >
+        {{ configs.author.name }}
+      </a>
+    </div>
   </div>
 </template>
 
@@ -258,6 +298,7 @@
 import { component as month } from '@/modules/month'
 import { component as day } from '@/modules/day'
 import { mapActions, mapGetters } from 'vuex'
+import configs from '@/../package.json'
 export default {
   name: 'custom-calendar',
   props: {
@@ -286,7 +327,8 @@ export default {
       month: '',
       year: '',
       day: '',
-      events: []
+      events: [],
+      configs
     }
   },
   components: {
@@ -317,7 +359,14 @@ export default {
           const dataDate = new Date(data.date)
           const ref = (typeof param === 'object') ? param : new Date(param)
 
-          if (dataDate.getDate() === ref.getDate()) {
+          if (
+            (
+              dataDate.getDate() === ref.getDate()
+            ) &&
+            (
+              dataDate.getMonth() === ref.getMonth()
+            )
+          ) {
             this.events.push(data)
           }
         },
@@ -325,7 +374,20 @@ export default {
           const init = new Date(data.init)
           const end = new Date(data.end)
           const ref = (typeof param === 'object') ? param : new Date(param)
-          if ((init.getDate() <= ref.getDate()) && (end.getDate() >= ref.getDate())) {
+          if (
+            (
+              (
+                init.getDate() <= ref.getDate()
+              ) &&
+                (
+                  end.getDate() >= ref.getDate()
+                )
+            ) &&
+            (
+              init.getMonth() === ref.getMonth() ||
+              end.getMonth() === ref.getMonth()
+            )
+          ) {
             this.events.push(data)
           }
         },
@@ -333,7 +395,14 @@ export default {
           const dataDate = new Date(data.date)
           const ref = (typeof param === 'object') ? param : new Date(param)
 
-          if (dataDate.getDate() === ref.getDate()) {
+          if (
+            (
+              dataDate.getDate() === ref.getDate()
+            ) &&
+            (
+              dataDate.getMonth() === ref.getMonth()
+            )
+          ) {
             this.events.push(data)
           }
         }
@@ -379,6 +448,9 @@ export default {
           return `Em ${date.toLocaleDateString()}`
         }
       }
+    },
+    changeMonthOrYear (data) {
+      this.changeDay(data)
     }
   },
   mounted () {

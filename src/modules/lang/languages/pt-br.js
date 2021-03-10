@@ -6,6 +6,7 @@ export default {
     'abril',
     'maio',
     'junho',
+    'julho',
     'agosto',
     'setembro',
     'outubro',
