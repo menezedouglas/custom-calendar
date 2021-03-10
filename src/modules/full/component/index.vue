@@ -127,7 +127,7 @@
 .card-markups {
   border: none !important;
   min-height: 290px;
-  max-height: 350px;
+  max-height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
 }
@@ -138,7 +138,7 @@
 }
 
 .card-markup .card-body {
-  background: rgba(13,110,253,.3);
+  background: rgba(13,110,253,.2);
 }
 
 </style>

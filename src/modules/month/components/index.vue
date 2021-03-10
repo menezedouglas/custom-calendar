@@ -99,11 +99,23 @@
       <div class="col px-4 pb-3 pt-2">
         <div class="row">
           <div class="col-auto">
-            <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-              <button type="button" class="btn btn-sm btn-primary">
+            <div
+              class="btn-group btn-group-sm"
+              role="group"
+              aria-label="Basic example"
+            >
+              <button
+                type="button"
+                class="btn btn-sm btn-primary"
+                @click="backward('year')"
+              >
                 <i class="fas fa-fast-backward"></i>
               </button>
-              <button type="button" class="btn btn-sm btn-primary">
+              <button
+                type="button"
+                class="btn btn-sm btn-primary"
+                @click="backward('month')"
+              >
                 <i class="fas fa-step-backward"></i>
               </button>
             </div>
@@ -112,11 +124,23 @@
             <h5 v-if="mode === 'mini'">{{ month.toUpperCase() }} {{ year }}</h5>
           </div>
           <div class="col-auto">
-            <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
-              <button type="button" class="btn btn-sm btn-primary">
+            <div
+              class="btn-group btn-group-sm"
+              role="group"
+              aria-label="Basic example"
+            >
+              <button
+                type="button"
+                class="btn btn-sm btn-primary"
+                @click="forward('month')"
+              >
                 <i class="fas fa-step-forward"></i>
               </button>
-              <button type="button" class="btn btn-sm btn-primary">
+              <button
+                type="button"
+                class="btn btn-sm btn-primary"
+                @click="forward('year')"
+              >
                 <i class="fas fa-fast-forward"></i>
               </button>
             </div>
@@ -256,6 +280,47 @@ export default {
               ) : 'day-arya util-day')
           ) : 'day-arya day-inactive'
       )
+    },
+    backward (type) {
+      const types = {
+        month: () => {
+          const month = (this.getMonth() - 1 < 0) ? 11 : this.getMonth() - 1
+          const year = (this.getMonth() - 1 < 0) ? this.getYear() - 1 : this.getYear()
+          const date = `${((month + 1).toString().length === 1) ? `0${month + 1}` : month + 1}/01/${year}`
+          console.log(date)
+          this.ActionSetDate(date)
+        },
+        year: () => {
+          const month = this.getMonth()
+          const year = this.getYear() - 1
+          const date = `${((month + 1).toString().length === 1) ? `0${month + 1}` : month + 1}/01/${year}`
+          this.ActionSetDate(date)
+        }
+      }
+
+      types[type]()
+      this.setLanguage()
+      this.generateTable()
+    },
+    forward (type) {
+      const types = {
+        month: () => {
+          const month = (this.getMonth() + 1 > 11) ? 1 : (this.getMonth() + 1)
+          const year = (this.getMonth() + 1 > 11) ? this.getYear() + 1 : this.getYear()
+          const date = `${((month + 1).toString().length === 1) ? `0${month + 1}` : month + 1}/01/${year}`
+          this.ActionSetDate(date)
+        },
+        year: () => {
+          const month = this.getMonth()
+          const year = this.getYear() + 1
+          const date = `${((month + 1).toString().length === 1) ? `0${month + 1}` : month + 1}/01/${year}`
+          this.ActionSetDate(date)
+        }
+      }
+
+      types[type]()
+      this.setLanguage()
+      this.generateTable()
     }
   },
   mounted () {
