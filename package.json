@@ -1,6 +1,8 @@
 {
   "name": "dm_calendar",
-  "version": "0.5.3",
+  "description": "Douglas Menezes Calendar Library",
+  "version": "0.8.0",
+  "main": "./dist/dm_calendar.common.js",
   "author": {
     "name": "Douglas Menezes",
     "email": "menezedouglas@outlook.com.br",
@@ -31,6 +33,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build:npm": "vue-cli-service build --target lib --name dm_calendar src/index.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -75,5 +78,8 @@
     "> 1%",
     "last 2 versions",
     "not dead"
+  ],
+  "files": [
+    "dist/*"
   ]
 }
