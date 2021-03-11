@@ -32,7 +32,7 @@
 #left_bar_ctrl:checked ~ .top-bar {
   width: calc(100% - 50px) !important;
 }
-
+#left_bar_ctrl:checked ~ .footer,
 #left_bar_ctrl:checked ~ .content {
   width: calc(100% - 50px) !important;
 }
@@ -65,6 +65,7 @@
 
 .left-bar {
   position: fixed;
+  z-index: 10;
   top: 0;
   left: 0;
   width: 400px;
@@ -148,12 +149,13 @@
   width: calc(100% - 400px);
   height: 50px;
   padding: 17px;
-  box-shadow:  0 0 10px 2px rgba(0,0,0,.5);
+  border-top: 1px solid #c1c1c1;
   z-index: -1;
   color: rgba(0,0,0,.5);
   text-align: right;
   font-size: 9pt;
   font-weight: bold;
+  transition: all .4s ease-in-out;
 }
 
 .footer a {
@@ -198,7 +200,7 @@
               <div class="card-body">
                 <div
                   class="card card-markup"
-                  v-for="(date, index) in data"
+                  v-for="(date, index) in eventsMonth"
                   v-bind:key="index"
                 >
                   <div class="card-body">
@@ -216,7 +218,7 @@
                   </div>
                 </div>
                 <div
-                  v-if="data.length === 0"
+                  v-if="eventsMonth.length === 0"
                   class="alert alert-success"
                 >
                   Não há programação para este mês!
@@ -271,7 +273,7 @@
     <div class="content">
       <day
         :langname="(lang) ? lang : `pt-br`"
-        :events="events"
+        :events="eventsDay"
         :date="date"
       ></day>
     </div>
@@ -327,7 +329,8 @@ export default {
       month: '',
       year: '',
       day: '',
-      events: [],
+      eventsDay: [],
+      eventsMonth: [],
       configs
     }
   },
@@ -351,63 +354,91 @@ export default {
         (typeof this.date === 'object') ? this.date.getDate() : new Date(this.date).getDate()
       ))
     },
-    changeDay (date) {
-      this.$emit('changeDate', date)
+    changeDay (date, allOfMonth = false, emit = true) {
+      if (emit) this.$emit('changeDate', date)
       this.setLanguage(this.lang, true, date)
       const showDate = {
         other: (data, param) => {
           const dataDate = new Date(data.date)
           const ref = (typeof param === 'object') ? param : new Date(param)
-
-          if (
-            (
-              dataDate.getDate() === ref.getDate()
-            ) &&
-            (
-              dataDate.getMonth() === ref.getMonth()
-            )
-          ) {
-            this.events.push(data)
+          if (allOfMonth) {
+            if (
+              dataDate.getMonth() === ref.getMonth() &&
+              dataDate.getFullYear() === ref.getFullYear()
+            ) {
+              this.eventsMonth.push(data)
+            }
+          } else {
+            if (
+              dataDate.getDate() === ref.getDate() &&
+              dataDate.getMonth() === ref.getMonth() &&
+              dataDate.getFullYear() === ref.getFullYear()
+            ) {
+              this.eventsDay.push(data)
+            }
           }
         },
         event: (data, param) => {
           const init = new Date(data.init)
           const end = new Date(data.end)
           const ref = (typeof param === 'object') ? param : new Date(param)
-          if (
-            (
+          if (allOfMonth) {
+            if (
               (
-                init.getDate() <= ref.getDate()
+                init.getMonth() === ref.getMonth() &&
+                init.getFullYear() === ref.getFullYear()
+              ) ||
+              (
+                end.getMonth() === ref.getMonth() &&
+                end.getFullYear() === ref.getFullYear()
+              )
+            ) {
+              this.eventsMonth.push(data)
+            }
+          } else {
+            if (
+              (
+                init.getDate() <= ref.getDate() &&
+                end.getDate() >= ref.getDate()
               ) &&
+              (
                 (
-                  end.getDate() >= ref.getDate()
+                  init.getMonth() === ref.getMonth() &&
+                  init.getFullYear() === ref.getFullYear()
+                ) ||
+                (
+                  end.getMonth() === ref.getMonth() &&
+                  end.getFullYear() === ref.getFullYear()
                 )
-            ) &&
-            (
-              init.getMonth() === ref.getMonth() ||
-              end.getMonth() === ref.getMonth()
-            )
-          ) {
-            this.events.push(data)
+              )
+            ) {
+              this.eventsDay.push(data)
+            }
           }
         },
         holiday: (data, param) => {
           const dataDate = new Date(data.date)
           const ref = (typeof param === 'object') ? param : new Date(param)
 
-          if (
-            (
-              dataDate.getDate() === ref.getDate()
-            ) &&
-            (
-              dataDate.getMonth() === ref.getMonth()
-            )
-          ) {
-            this.events.push(data)
+          if (allOfMonth) {
+            if (
+              dataDate.getMonth() === ref.getMonth() &&
+              dataDate.getFullYear() === ref.getFullYear()
+            ) {
+              this.eventsMonth.push(data)
+            }
+          } else {
+            if (
+              dataDate.getDate() === ref.getDate() &&
+              dataDate.getMonth() === ref.getMonth() &&
+              dataDate.getFullYear() === ref.getFullYear()
+            ) {
+              this.eventsDay.push(data)
+            }
           }
         }
       }
-      this.events = []
+      if (allOfMonth) { this.eventsMonth = [] } else { this.eventsDay = [] }
       this.data.map(data => {
         showDate[data.type](data, date)
       })
@@ -450,11 +481,12 @@ export default {
       }
     },
     changeMonthOrYear (data) {
-      this.changeDay(data)
+      this.changeDay(data, true, false)
     }
   },
   mounted () {
-    this.setLanguage()
+    const date = (typeof this.date === 'object') ? this.date : new Date(this.date)
+    this.changeDay(date, true, false)
   }
 }
 </script>

@@ -5,7 +5,10 @@
       :date="new Date()"
       :data="database"
       @changeDate="changeDate($event)"
-      :options="{}"
+      :options="{
+        selectLanguage: false,
+        showDate: false
+      }"
     ></full>
   </div>
 </template>
