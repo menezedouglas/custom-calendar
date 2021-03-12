@@ -4,7 +4,7 @@ import '@fortawesome/fontawesome-free/js/all.min.js'
 import Vue from 'vue'
 import App from './App.vue'
 import store from './store'
-import bootstrap from '@/modules/bootstrap'
+import bootstrap from './modules/bootstrap'
 
 Vue.config.productionTip = false
 

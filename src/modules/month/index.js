@@ -1,2 +1,2 @@
-export { default as component } from './components'
+export { default as component } from './components/index.vue'
 export { default as store } from './store'

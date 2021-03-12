@@ -297,10 +297,10 @@
 </template>
 
 <script>
-import { component as month } from '@/modules/month'
-import { component as day } from '@/modules/day'
+import { component as month } from './../../month'
+import { component as day } from './../../day'
 import { mapActions, mapGetters } from 'vuex'
-import configs from '@/../package.json'
+import configs from './../../../../package.json'
 export default {
   name: 'custom-calendar',
   props: {

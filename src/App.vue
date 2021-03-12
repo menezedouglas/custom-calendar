@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { component as full } from '@/modules/full'
+import { component as full } from './modules/full'
 export default {
   name: 'custom-calendar',
   data () {
