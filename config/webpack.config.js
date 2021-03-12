@@ -7,7 +7,6 @@ module.exports = {
     path: path.resolve(__dirname + './../dist'),
     filename: 'dm_calendar.js'
   },
-  mode: 'development',
   module: {
     rules: [{
       test: /\.js$/,
