@@ -22,10 +22,4 @@ if (GlobalVue) {
   GlobalVue.use(plugin);
 }
 
-fullWidthComponent.install = install;
-example.install = install;
-
-export default {
-  fullWidthComponent,
-  example
-};
+export default example;
