@@ -1,7 +1,7 @@
 {
   "name": "dm_calendar",
   "description": "Douglas Menezes Calendar Library",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "main": "./dist/dm_calendar.common.js",
   "author": {
     "name": "Douglas Menezes",
