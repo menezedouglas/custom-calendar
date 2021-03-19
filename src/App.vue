@@ -1,20 +1,20 @@
 <template>
   <div>
-    <full
+    <mini
       lang="pt-br"
       :date="new Date()"
       :data="database"
       @changeDate="changeDate($event)"
       :options="{
-        selectLanguage: false,
-        showDate: false
+        selectLanguage: true,
+        showDate: true
       }"
-    ></full>
+    ></mini>
   </div>
 </template>
 
 <script>
-import { component as full } from './modules/full'
+import { component as mini } from './modules/mini'
 export default {
   name: 'custom-calendar',
   data () {
@@ -51,7 +51,7 @@ export default {
     }
   },
   components: {
-    full
+    mini
   },
   methods: {
     changeDate (date) {
